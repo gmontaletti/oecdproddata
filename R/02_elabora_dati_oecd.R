@@ -114,7 +114,7 @@ ggplot(salario_medio, aes(x = obsTime, y = salario_medio, group = COUNTRY, color
   scale_color_brewer(palette = "Dark2", name=" ") +
   facet_wrap(~ COUNTRY, nrow = 2, ncol = 3)
 
-#  assieme
+# unice salario medio e pil per ora lavorata
 
 prod_sal <- salario_medio %>%
   left_join(ora_lavorata, by = c("COUNTRY" = "LOCATION", "obsTime" = "obsTime")) %>%
