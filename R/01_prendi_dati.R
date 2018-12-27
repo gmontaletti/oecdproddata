@@ -1,9 +1,9 @@
-#
+################################################
 # Elaborazione dei dati OECD sulla produttività
 #
 # scarica i dati e produce alcuni grafici sulla produttività comparata in 6 paesi frai quali l'Italia.
-#
-#
+# scritto per l'articolo sul "professionalità" del gannaio 2019
+################################################
 
 # richiede la libreria "OECD"
 # install.packages("OECD")
