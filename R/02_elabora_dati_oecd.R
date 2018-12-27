@@ -9,6 +9,7 @@
 
 # librerie richieste #####
 library(tidyverse)
+library(ggthemes)
 
 # carica i dati ######
 # carica i dati salvati in precedenza
@@ -27,28 +28,29 @@ load(file = "data/ulc.RData")
 
 # elaborazioni ####
 
-ulc_paesi <- ulc %>%  filter(FREQUENCY == "A",
-               SUBJECT == "ULQEUL01",
-               MEASURE =="IXOBSA",
-               LOCATION %in% c("ITA", "FRA", "DEU", "GBR", "JPN", "USA"))
-ulc_paesixocc <- ulc %>%  filter(
-                             SUBJECT == "ULQECU01",
-                             MEASURE =="IXOBSA",
-                             LOCATION %in% c("ITA", "FRA", "DEU", "GBR", "JPN", "USA"))
-ulc_gdp <- ulc %>%  filter(
-                                 SUBJECT == "ULQELP01",
+# seleziona paesi per il numero indice
+# ulc_paesi <- ulc %>%  filter(FREQUENCY == "A",
+#                SUBJECT == "ULQEUL01",
+#                MEASURE =="IXOBSA",
+#                LOCATION %in% c("ITA", "FRA", "DEU", "GBR", "JPN", "USA"))
+#
+# ulc_paesixocc <- ulc %>%  filter(SUBJECT == "ULQECU01",
+#                              MEASURE =="IXOBSA",
+#                              LOCATION %in% c("ITA", "FRA", "DEU", "GBR", "JPN", "USA"))
+
+# selezione numero indice trimestrale del pil per occupato
+ulc_gdp <- ulc %>%  filter(SUBJECT == "ULQELP01",
                                  MEASURE =="IXOBSA",
                                  LOCATION %in% c("ITA", "FRA", "DEU", "GBR", "JPN", "USA"))
 
 
 
-# pil per occupato #####
+# fig. pil per occupato #####
 
 ulc_gdp_s <- ulc_gdp %>%
   mutate(pil_nr_indice = obsValue) %>%
   filter(obsTime >= "1991-Q1") %>%
   select(LOCATION, obsTime, pil_nr_indice)
-
 
 ggplot(ulc_gdp_s, aes(x = obsTime, y = pil_nr_indice , group = LOCATION, color = LOCATION)) +
   geom_point(size = 0.5, show.legend = FALSE) +
@@ -62,7 +64,7 @@ ggplot(ulc_gdp_s, aes(x = obsTime, y = pil_nr_indice , group = LOCATION, color =
   scale_color_brewer(palette = "Dark2", name=" ") +
   facet_wrap(~ LOCATION, nrow = 2, ncol = 3)
 
-#  pil per ora lavorata
+#  fig. pil per ora lavorata ####
 ora_lavorata <- productivity %>%
   filter(SUBJECT == "T_GDPHRS", MEASURE == "VPVOB" ,
                                 LOCATION %in% c("ITA", "FRA", "DEU", "GBR", "JPN", "USA")) %>%
@@ -126,7 +128,6 @@ ggplot(prod_sal, aes(x = pil_ora, y = salario_medio, group = COUNTRY, color = CO
   geom_smooth(se = F, show.legend = FALSE, method  = "lm") +
   geom_point(data = maxs, col = 'black', size = 2) +
   geom_text(data = maxs, aes(label = obsTime), vjust = -0.39, show.legend = FALSE) +
-  # geom_text(data = mins, aes(label = obsTime), vjust = -0.39, show.legend = FALSE) +
   theme_minimal() +
   scale_y_continuous("Salario medio annuo") +
   scale_x_continuous("Pil per ora lavorata") +
@@ -138,13 +139,6 @@ ggplot(prod_sal, aes(x = pil_ora, y = salario_medio, group = COUNTRY, color = CO
 
 # tuftee
 
-library(ggplot2)
-library(ggthemes)
-library(dplyr)
-library(reshape)
-library(RCurl)
-
-
 mins <- prod_sal %>% group_by(COUNTRY) %>% slice(which.min(salario_medio))
 maxs <- prod_sal %>% group_by(COUNTRY) %>% slice(which.max(salario_medio))
 ends <- prod_sal %>% group_by(COUNTRY) %>% filter(obsTime == max(obsTime))
@@ -152,7 +146,7 @@ quarts <- prod_sal %>% group_by(COUNTRY) %>%
   summarize(quart1 = quantile(salario_medio, 0.25),
             quart2 = quantile(salario_medio, 0.75)) %>%
   right_join(prod_sal)
-# pdf("sparklines_ggplot.pdf", height=10, width=8)
+
 ggplot(prod_sal, aes(x=obsTime, y=salario_medio)) +
   facet_grid(COUNTRY ~ ., scales = "free_y") +
   geom_ribbon(data = quarts, aes(ymin = quart1, max = quart2), fill = 'grey90') +
@@ -172,6 +166,5 @@ ggplot(prod_sal, aes(x=obsTime, y=salario_medio)) +
   labs(title = "Salario medio annuo",
        subtitle = "intera economia, PPPs 2017, 000 dollari, a prezzi costanti",
        caption = "elaborazione su dati OECD")
-# dev.off()
 
 
