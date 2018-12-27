@@ -1,56 +1,32 @@
-# Descrizione ##########
-# Elaborazione dei dati OECD sulla produttività
-# File 01_scarica_dati_oecd.R
+# 02_elabora_dati_oecd.R ##########
 #
-# scarica i dati li salva per la successiva elaborazione
+# Elaborazione dei dati OECD sulla produttività
+# File 02_elabora_dati_oecd.R
+#
+# carica i dati salvati e produce i grafici sulla produttività
+# in 6 paesi fa i quali l'Italia
 ###
 
 # librerie richieste #####
-# richiede la libreria "OECD"
-# install.packages("OECD")
-library(OECD)
 library(tidyverse)
 
-#  legge da OECD i datasets disponibili ######
-# genera un dataframe con id e titolo di dataset
-oecd_dati <- get_datasets()
+# carica i dati ######
+# carica i dati salvati in precedenza
 
-# cerca nella lista dei dataset quelli che contengono la parola "productivity"
-search_dataset("productivity", data = oecd_dati, ignore.case = T)
+# produttività
+load(file = "data/produttivita.RData")
 
-# cerca nella lista dei dataset quelli che contengono la parola "wage"
-search_dataset("wage", data = oecd_dati, ignore.case = T)
+# salari
+load(file = "data/salari.RData")
 
-# acquisisce i dati sulla produttività
-# PDB_LV  "Level of GDP per capita and productivity"
-productivity <- get_dataset("PDB_LV")
-save(productivity, file = "produttivita.RData")
-
-prod_stru <- get_data_structure("PDB_LV")
-prod_stru[["SUBJECT"]]
-prod_stru[["VAR_DESC"]]
-prod_stru[["MEASURE"]]
-
-#  acquisisce i dati sui salari
-
-salari_medi <- get_dataset("AV_AN_WAGE")
-save(salari_medi, file = "salari.RData")
-# salari_medi_str <- get_data_structure("AV_AN_WAGE")
-# salari_medi_str[["VAR_DESC"]]
-# salari_medi_str[["SERIES"]]
-
-#  dati sulla produttività multi fattore
-mfp <- get_dataset("MFP")
-save(mfp, file = "mfp.RData")
-mfp_str <- get_data_structure("MFP")
-mfp_str[["VAR"]]
+#  prduttività multifattore (non usato)
+load(file = "data/mfp.RData")
 
 # ULC_EEQ Unit labour costs and labour productivity (employment based), Total economy
-ulc <- get_dataset("ULC_EEQ")
-save(ulc, file = "ulc.RData")
-# ulc_str <- get_data_structure("ULC_EEQ")
-# ulc_str[["MEASURE"]]
-# ulc_str[["SUBJECT"]]
+load(file = "data/ulc.RData")
+
+# elaborazioni ####
+
 ulc_paesi <- ulc %>%  filter(FREQUENCY == "A",
                SUBJECT == "ULQEUL01",
                MEASURE =="IXOBSA",
@@ -66,9 +42,7 @@ ulc_gdp <- ulc %>%  filter(
 
 
 
-# elaborazioni #####
-
-#  pil per occupato
+# pil per occupato #####
 
 ulc_gdp_s <- ulc_gdp %>%
   mutate(pil_nr_indice = obsValue) %>%
