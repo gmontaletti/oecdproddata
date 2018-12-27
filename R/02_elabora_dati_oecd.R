@@ -1,12 +1,11 @@
-################################################
+# Descrizione ##########
 # Elaborazione dei dati OECD sulla produttività
 # File 01_scarica_dati_oecd.R
 #
 # scarica i dati li salva per la successiva elaborazione
-# e produce alcuni grafici sulla produttività comparata in 6 paesi frai quali l'Italia.
-# scritto per l'articolo sul "professionalità" del gennaio 2019
-################################################
+###
 
+# librerie richieste #####
 # richiede la libreria "OECD"
 # install.packages("OECD")
 library(OECD)
@@ -22,37 +21,33 @@ search_dataset("productivity", data = oecd_dati, ignore.case = T)
 # cerca nella lista dei dataset quelli che contengono la parola "wage"
 search_dataset("wage", data = oecd_dati, ignore.case = T)
 
-#  acquisisce i dati sulla produttività
+# acquisisce i dati sulla produttività
 # PDB_LV  "Level of GDP per capita and productivity"
-# productivity <- get_dataset("PDB_LV")
-# save(productivity, file = "produttivita.RData")
-load(file = "data/produttivita.RData")
-prod_stru <- get_data_structure("PDB_LV")
+productivity <- get_dataset("PDB_LV")
+save(productivity, file = "produttivita.RData")
 
+prod_stru <- get_data_structure("PDB_LV")
 prod_stru[["SUBJECT"]]
 prod_stru[["VAR_DESC"]]
 prod_stru[["MEASURE"]]
 
 #  acquisisce i dati sui salari
 
-# salari_medi <- get_dataset("AV_AN_WAGE")
-# save(salari_medi, file = "salari.RData")
-load("data/salari.RData")
+salari_medi <- get_dataset("AV_AN_WAGE")
+save(salari_medi, file = "salari.RData")
 # salari_medi_str <- get_data_structure("AV_AN_WAGE")
 # salari_medi_str[["VAR_DESC"]]
 # salari_medi_str[["SERIES"]]
 
 #  dati sulla produttività multi fattore
-# mfp <- get_dataset("MFP")
-# save(mfp, file = "mfp.RData")
-load("data/mfp.RData")
+mfp <- get_dataset("MFP")
+save(mfp, file = "mfp.RData")
 mfp_str <- get_data_structure("MFP")
 mfp_str[["VAR"]]
 
 # ULC_EEQ Unit labour costs and labour productivity (employment based), Total economy
-# ulc <- get_dataset("ULC_EEQ")
-# save(ulc, file = "ulc.RData")
-load("data/ulc.RData")
+ulc <- get_dataset("ULC_EEQ")
+save(ulc, file = "ulc.RData")
 # ulc_str <- get_data_structure("ULC_EEQ")
 # ulc_str[["MEASURE"]]
 # ulc_str[["SUBJECT"]]
