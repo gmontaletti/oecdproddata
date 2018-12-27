@@ -137,7 +137,7 @@ ggplot(prod_sal, aes(x = pil_ora, y = salario_medio, group = COUNTRY, color = CO
   scale_color_brewer(palette = "Dark2", name=" ")
 
 
-# tuftee
+# grafico serie storiche impilate
 
 mins <- prod_sal %>% group_by(COUNTRY) %>% slice(which.min(salario_medio))
 maxs <- prod_sal %>% group_by(COUNTRY) %>% slice(which.max(salario_medio))
