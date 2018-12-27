@@ -1,8 +1,10 @@
 ################################################
 # Elaborazione dei dati OECD sulla produttività
+# File 01_scarica_dati_oecd.R
 #
-# scarica i dati e produce alcuni grafici sulla produttività comparata in 6 paesi frai quali l'Italia.
-# scritto per l'articolo sul "professionalità" del gannaio 2019
+# scarica i dati li salva per la successiva elaborazione
+# e produce alcuni grafici sulla produttività comparata in 6 paesi frai quali l'Italia.
+# scritto per l'articolo sul "professionalità" del gennaio 2019
 ################################################
 
 # richiede la libreria "OECD"
