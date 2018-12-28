@@ -27,21 +27,6 @@ load(file = "data/mfp.RData")
 load(file = "data/ulc.RData")
 
 # elaborazioni ####
-
-# seleziona paesi per il numero indice
-# ulc_paesi <- ulc %>%  filter(FREQUENCY == "A",
-#                SUBJECT == "ULQEUL01",
-#                MEASURE =="IXOBSA",
-#                LOCATION %in% c("ITA", "FRA", "DEU", "GBR", "JPN", "USA"))
-#
-# ulc_paesixocc <- ulc %>%  filter(SUBJECT == "ULQECU01",
-#                              MEASURE =="IXOBSA",
-#                              LOCATION %in% c("ITA", "FRA", "DEU", "GBR", "JPN", "USA"))
-
-
-
-
-
 # fig. pil per occupato #####
 
 # selezione numero indice trimestrale destagionalizzato del pil per occupato
@@ -77,7 +62,6 @@ ora_lavorata <- productivity %>%
   mutate(pil_ora = obsValue) %>%
   select(LOCATION, obsTime, pil_ora) %>%
   filter(obsTime >= 1992)
-
 
 ggplot(ora_lavorata, aes(x = obsTime, y = pil_ora, group = LOCATION, color = LOCATION)) +
   geom_point(size = 0.5, show.legend = FALSE) +
