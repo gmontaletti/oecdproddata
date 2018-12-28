@@ -38,20 +38,24 @@ load(file = "data/ulc.RData")
 #                              MEASURE =="IXOBSA",
 #                              LOCATION %in% c("ITA", "FRA", "DEU", "GBR", "JPN", "USA"))
 
-# selezione numero indice trimestrale del pil per occupato
-ulc_gdp <- ulc %>%  filter(SUBJECT == "ULQELP01",
-                                 MEASURE =="IXOBSA",
-                                 LOCATION %in% c("ITA", "FRA", "DEU", "GBR", "JPN", "USA"))
+
 
 
 
 # fig. pil per occupato #####
 
+# selezione numero indice trimestrale destagionalizzato del pil per occupato
+ulc_gdp <- ulc %>%  filter(SUBJECT == "ULQELP01",
+                           MEASURE =="IXOBSA",
+                           LOCATION %in% c("ITA", "FRA", "DEU", "GBR", "JPN", "USA"))
+
+# limita la serie dal primo trimestre 1991
 ulc_gdp_s <- ulc_gdp %>%
   mutate(pil_nr_indice = obsValue) %>%
   filter(obsTime >= "1991-Q1") %>%
   select(LOCATION, obsTime, pil_nr_indice)
 
+# genera grafico del pil per occupato
 ggplot(ulc_gdp_s, aes(x = obsTime, y = pil_nr_indice , group = LOCATION, color = LOCATION)) +
   geom_point(size = 0.5, show.legend = FALSE) +
   geom_smooth(se = F, show.legend = FALSE) +
@@ -64,7 +68,8 @@ ggplot(ulc_gdp_s, aes(x = obsTime, y = pil_nr_indice , group = LOCATION, color =
   scale_color_brewer(palette = "Dark2", name=" ") +
   facet_wrap(~ LOCATION, nrow = 2, ncol = 3)
 
-#  fig. pil per ora lavorata ####
+# fig. pil per ora lavorata ####
+# seleziona i dati del Pil per ora lavorata
 ora_lavorata <- productivity %>%
   filter(SUBJECT == "T_GDPHRS", MEASURE == "VPVOB" ,
                                 LOCATION %in% c("ITA", "FRA", "DEU", "GBR", "JPN", "USA")) %>%
@@ -73,11 +78,6 @@ ora_lavorata <- productivity %>%
   select(LOCATION, obsTime, pil_ora) %>%
   filter(obsTime >= 1992)
 
-brea <- seq(from = 1992, to = 2017, by = 5)
-brea <- (as.character(brea))
-class(brea)
-is.vector(brea)
-brea
 
 ggplot(ora_lavorata, aes(x = obsTime, y = pil_ora, group = LOCATION, color = LOCATION)) +
   geom_point(size = 0.5, show.legend = FALSE) +
@@ -91,8 +91,8 @@ scale_x_continuous("anno") +
    scale_color_brewer(palette = "Dark2", name=" ") +
 facet_wrap(~ LOCATION, nrow = 2, ncol = 3)
 
-#  elabora salari #####
-
+# fig. salari #####
+# seleziona salario medio annuo in ppps in miglia di dollari a prezzi costanti
 salario_medio <- salari_medi %>%
   filter(SERIES == "USDPPP",
          COUNTRY %in% c("ITA", "FRA", "DEU", "GBR", "JPN", "USA")) %>%
@@ -114,8 +114,9 @@ ggplot(salario_medio, aes(x = obsTime, y = salario_medio, group = COUNTRY, color
   scale_color_brewer(palette = "Dark2", name=" ") +
   facet_wrap(~ COUNTRY, nrow = 2, ncol = 3)
 
+#  fig. prod-salario ####
 # unisce salario medio e pil per ora lavorata
-#  limita la serie dal 1992
+# limita la serie dal 1992
 prod_sal <- salario_medio %>%
   left_join(ora_lavorata, by = c("COUNTRY" = "LOCATION", "obsTime" = "obsTime")) %>%
   filter(obsTime >= 1992)
@@ -138,6 +139,7 @@ ggplot(prod_sal, aes(x = pil_ora, y = salario_medio, group = COUNTRY, color = CO
   scale_color_brewer(palette = "Dark2", name=" ")
 
 
+# fig. salari serie storica ####
 # grafico serie storiche impilate
 
 mins <- prod_sal %>% group_by(COUNTRY) %>% slice(which.min(salario_medio))
