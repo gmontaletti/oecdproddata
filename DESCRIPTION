@@ -1,10 +1,10 @@
 Package: oecdproddata
 Type: Package
-Title: OECD produttivita dati
+Title: OECD produttività dati
 Version: 0.1.0
 Author: Giampaolo Montaletti
 Maintainer: Giampaolo Montaletti <giampaolo@montaletti.com>
-Description: scarica e analizza i dati della produttività da OECD
+Description: scarica e analizza i dati della produttività da OECD e li confronta fra 6 paesi diversi, includendo l'Italia. I dati sono distribuiti assieme ad un articolo di commento e con le procedure per il loro aggiornamento e uso.
 License: MIT
 Encoding: UTF-8
 LazyData: true
