@@ -3,8 +3,8 @@ title: "La produttività del lavoro in Italia non cresce."
 author: "Giampaolo Montaletti"
 date: "2/1/2019"
 output:
-  pdf_document: default
   html_document: default
+  pdf_document: default
   word_document: default
 ---
 
@@ -60,7 +60,7 @@ ggplot(prod_sal, aes(x=obsTime, y=salario_medio)) +
 
 I salari italiani sono in discesa dal 2010, quelli britannici da alcuni anni prima e quelli giapponei dal 2011, anche se sono in recupero. Negli USA il calo riguarda gli ultimi due anni, mentre Francia e Germania hanno vissuto 25 anni di crescita ininterrotta. I salari italiani sono i più bassi del gruppo.
 
-### il Pil per ora lavorata.
+### Produttività: l Pil per ora lavorata.
 
 Un indicatore grezzo della produttività spesso utilizzato è il PIL prodotto da un'ora di lavoro. Ancher nella figura 2 sono riportati i valori in parità di potere d'acquisto espressi in dollari l'ora, per rendere comparabili i risultati di diverse economie. 
 
@@ -80,6 +80,27 @@ ggplot(ora_lavorata, aes(x = obsTime, y = pil_ora, group = LOCATION, color = LOC
 ```
 
 Per l'economia italiana la curva smette di crescere nel 2000 circa. Per tutti gli altri paesi un cambia di ritmo nel tasso di crescita comincia a manifestarsi nel 2005; in nessun caso il tasso di crescita della produttività è influenzato dalla crisi economica che è cominciata nel 2008, o dall'introduzione dell'euro che non c'è naturalmente stata per Giappone, Gran Bretagna e Stati Uniti. Guardando i tassi di crescita del PIL di Cina e India per gli anni 2000-2005 (fra il 7 e l'8% per entrambe le economie) viene più da pensare ad un problema di concorrenza internazionale.
+
+Se invece del PIL per ora lavorata prendiamo il PIL per addetto (nella figura 2bis) abbiamo una visione diversa del problema. Il grafico mostra un indice 
+
+```{r pil_per_occupato, echo=FALSE, message=FALSE, warning=FALSE}
+#  plot pil per occupato ####
+ggplot(ulc_gdp_s, aes(x = obsTime, y = pil_nr_indice , group = LOCATION, color = LOCATION)) +
+  geom_point(size = 0.5, show.legend = FALSE) +
+  geom_smooth(se = F, show.legend = FALSE) +
+  theme_minimal() +
+  scale_y_continuous("Fig 2bis - Pil per occupato") +
+  scale_x_discrete(" ", breaks = c("1995.Q4", "2000.Q4", "2005.Q4", "2010.Q4", "2015.Q4" )) +
+  labs(title = "PIL per occupato",
+       subtitle = "numero indice 2015 = 100",
+       caption = "elaborazione su dati OECD") +
+  scale_color_brewer(palette = "Dark2", name=" ") +
+  facet_wrap(~ LOCATION, nrow = 2, ncol = 3)
+```
+
+
+
+
 
 ### Salari e produttività: esiste una relazione?
 
@@ -105,7 +126,24 @@ La relazione fra crescita della produttività è chiara per quasi tutti paesi: l
 
 ### Alcune conclusioni
 
-Cosa hanno in comune Giappone e Italia? Almeno due cose: un alto debito pubblico in rapporto al PIL e una popolazione che invecchia rapidamente. Visto che le politiche italiane sono note mi limito a sintetizzare le politiche del governo giapponese: i principali documenti del governo Abe individuano cinque punti chiave nell’azione del Governo: human resources development revolution, productivity revolution, work style reform, deregulation, regional revitalization. Vale a dire investimenti in capitale umano, deregolazione e animazione territoriale. Allo stesso tempo il governo giapponese punta al consolidamento fiscale al fine di rendere sostenibili gli oneri crescenti che il Paese deve sostenere a causa del declino demografico e dell’invecchiamento della popolazione.
+Cosa hanno in comune Giappone e Italia? Almeno due cose: un alto debito pubblico in rapporto al PIL e una popolazione che invecchia rapidamente.Visto che le politiche italiane sono note mi limito a commentare le politiche del governo giapponese: i principali documenti del governo Abe individuano cinque punti chiave nell’azione del Governo: human resources development revolution, productivity revolution, work style reform, deregulation, regional revitalization. Vale a dire investimenti in capitale umano, deregolazione e animazione territoriale. Allo stesso tempo il governo giapponese punta al consolidamento fiscale al fine di rendere sostenibili gli oneri crescenti che il Paese deve sostenere a causa del declino demografico e dell’invecchiamento della popolazione.
 
-I dati e le elaborazioni utilizzate per questo articolo (assieme ad una sua versione più lunga) sono disponibili qui: https://github.com/gmontaletti/oecdproddata.
+I dati e le elaborazioni utilizzate per questo articolo (assieme ad una sua versione più lunga) sono disponibili qui:  https://github.com/gmontaletti/oecdproddata.
 
+
+
+
+```{r salario_medio, echo=FALSE, message=FALSE, warning=FALSE}
+# plot salario medio #####
+ggplot(salario_medio, aes(x = obsTime, y = salario_medio, group = COUNTRY, color = COUNTRY)) +
+  geom_line(size = 0.5, show.legend = FALSE) +
+  geom_smooth(se = F, show.legend = FALSE) +
+  theme_minimal() +
+  scale_y_continuous("Salario medio annuo") +
+  scale_x_continuous(" ", breaks = seq(from = 1992, to = 2017, by = 5)) +
+  labs(title = "Salario medio",
+       subtitle = "intera economia, PPPs 2017, in migliaia di dollari, a prezzi costanti",
+       caption = "elaborazione su dati OECD") +
+  scale_color_brewer(palette = "Dark2", name=" ") +
+  facet_wrap(~ COUNTRY, nrow = 2, ncol = 3)
+```
