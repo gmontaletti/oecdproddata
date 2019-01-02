@@ -14,8 +14,6 @@ load("data-raw/produttivity.RData")
 load("data-raw/salari_medi.RData")
 load("data-raw/unit_labour_cost.RData")
 
-
-
 # pil per occupato ####
 ulc_gdp_s <- unit_labour_cost %>%  filter(
   SUBJECT == "ULQELP01",
@@ -25,6 +23,8 @@ ulc_gdp_s <- unit_labour_cost %>%  filter(
   mutate(pil_nr_indice = obsValue) %>%
   select(LOCATION, obsTime, pil_nr_indice)
 
+usethis::use_data(ulc_gdp_s, overwrite = TRUE)
+
 # pil per ora lavorata ####
 ora_lavorata <- productivity %>%
   filter(SUBJECT == "T_GDPHRS", MEASURE == "VPVOB" ,
@@ -33,6 +33,8 @@ ora_lavorata <- productivity %>%
   mutate(pil_ora = obsValue) %>%
   select(LOCATION, obsTime, pil_ora) %>%
   filter(obsTime >= 1992)
+
+usethis::use_data(ora_lavorata, overwrite = TRUE)
 
 # elabora salario medio ####
 
@@ -44,32 +46,16 @@ salario_medio <- salari_medi %>%
   select(COUNTRY, obsTime, salario_medio) %>%
   filter(obsTime >= 1992)
 
+usethis::use_data(salario_medio, overwrite = TRUE)
 
-ulc_paesixocc <- unit_labour_cost %>%  filter(
-  SUBJECT == "ULQECU01",
-  MEASURE =="IXOBSA",
-  LOCATION %in% c("ITA", "FRA", "DEU", "GBR", "JPN", "USA"))
-
-
-
-# ulc_gdp_s <- ulc_gdp %>%
-#   mutate(pil_nr_indice = obsValue) %>%
-#   filter(obsTime >= "1991-Q1") %>%
-
-
-
-
-#  assieme
-
+# salario medi e produttività ####
 prod_sal <- salario_medio %>%
   left_join(ora_lavorata, by = c("COUNTRY" = "LOCATION", "obsTime" = "obsTime")) %>%
   filter(obsTime >= 1992)
 
-maxs <- group_by(prod_sal, COUNTRY) %>% slice(which.max(salario_medio))
-mins <- group_by(prod_sal, COUNTRY) %>% slice(which.min(salario_medio))
+usethis::use_data(prod_sal, overwrite = TRUE)
 
-
-#  salari minimi, massimi e quartili
+# salari minimi, massimi e quartili ####
 mins <- prod_sal %>% group_by(COUNTRY) %>% slice(which.min(salario_medio))
 maxs <- prod_sal %>% group_by(COUNTRY) %>% slice(which.max(salario_medio))
 ends <- prod_sal %>% group_by(COUNTRY) %>% filter(obsTime == max(obsTime))
@@ -78,9 +64,10 @@ quarts <- prod_sal %>% group_by(COUNTRY) %>%
             quart2 = quantile(salario_medio, 0.75)) %>%
   right_join(prod_sal)
 
-
-
-
+usethis::use_data(mins, overwrite = TRUE)
+usethis::use_data(maxs, overwrite = TRUE)
+usethis::use_data(ends, overwrite = TRUE)
+usethis::use_data(quarts, overwrite = TRUE)
 
 #  plots ######
 #  plot pil per occupato ####
@@ -130,7 +117,6 @@ ggplot(prod_sal, aes(x = pil_ora, y = salario_medio, group = COUNTRY, color = CO
   geom_smooth(se = F, show.legend = FALSE, method  = "lm") +
   geom_point(data = maxs, col = 'black', size = 2) +
   geom_text(data = maxs, aes(label = obsTime), vjust = -0.39, show.legend = FALSE) +
-  # geom_text(data = mins, aes(label = obsTime), vjust = -0.39, show.legend = FALSE) +
   theme_minimal() +
   scale_y_continuous("Salario medio annuo") +
   scale_x_continuous("Pil per ora lavorata") +
@@ -140,7 +126,7 @@ ggplot(prod_sal, aes(x = pil_ora, y = salario_medio, group = COUNTRY, color = CO
   scale_color_brewer(palette = "Dark2", name=" ")
 
 
-
+# andamento salari nel tempo ####
 ggplot(prod_sal, aes(x=obsTime, y=salario_medio)) +
   facet_grid(COUNTRY ~ ., scales = "free_y") +
   geom_ribbon(data = quarts, aes(ymin = quart1, max = quart2), fill = 'grey90') +
