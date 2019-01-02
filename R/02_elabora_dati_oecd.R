@@ -75,7 +75,7 @@ scale_x_continuous("anno") +
    scale_color_brewer(palette = "Dark2", name=" ") +
 facet_wrap(~ LOCATION, nrow = 2, ncol = 3)
 
-# fig. salari #####
+# fig. salari medi annui #####
 # seleziona salario medio annuo in ppps in miglia di dollari a prezzi costanti
 salario_medio <- salari_medi %>%
   filter(SERIES == "USDPPP",
