@@ -2,7 +2,9 @@
 title: "I dati OECD su salari e Pil"
 author: "Giampaolo Montaletti"
 date: "2/1/2019"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
