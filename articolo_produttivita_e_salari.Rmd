@@ -1,10 +1,10 @@
 ---
-title: "I dati OECD su salari e Pil"
+title: "La produttività del lavoro in Italia non cresce."
 author: "Giampaolo Montaletti"
 date: "2/1/2019"
 output:
-  pdf_document: default
   html_document: default
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -16,11 +16,14 @@ library(tidyverse)
 library(ggthemes)
 devtools::load_all()
 ```
-## I dati OECD sulla produttività
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+La produttività del alvoro in Italia non cresce. o cresce molto lentamente. Allo stesso tempo i salari non crescono; alcuni dicono che non sono agganciati alla produttività, ma, poichè non crescono, semplicemente non sono in relazione con alcun fenomeno, o sono in relazione con un insieme di fenomeni che si elidono fra di loro.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+### I dati OECD sulla produttività
+
+Verso la fine del 2018 OECD (OCSE) ha pubblicato un aggiornamento sui dati del prodotto interno lordo e sulla produttività del lavoro nei paesi membri e nelle principali economie mondiali. I dati fanno riferimento al 2017 e sono una rielaborazione dei principali indicatori di contabilità nazionali, armonizzati in modo da renderli comparabili nel tempo e fra economie che sono molto diverse fra di loro.
+
 
 ## Including Plots
 
