@@ -3,18 +3,20 @@
 \docType{data}
 \name{maxs}
 \alias{maxs}
-\title{Data from Experiment 1}
-\format{A data frame with NNNN rows and NN variables:
+\title{Dati OECD sull'anno in cui si è rilevato il massimo del salario durante il periodo di osservazione 1992-2017.}
+\format{Un data frame con 6 righe e 4 variabili:
 \describe{
-  \item{subject}{Anonymized Mechanical Turk Worker ID}
-  \item{trial}{Trial number, from 1..NNN}
-  ...
+  \item{COUNTRY}{il paese osservato}
+  \item{obsTime}{l'anno in cui il salario medio ha toccato il massimo in qual paese}
+  \item{salario_medio}{il salario medio}
+  \item{pil_ora}{il pil per ora lavorata}
 }}
 \usage{
 maxs
 }
 \description{
-This is data from the first experiment ever to try XYZ using Mechanical
-Turk workers.
+I dati sono generati dal file data-raw/elabora_dati_oecd.R che elabora file scaricati dai sistemi OECD con lo script data-raw/prod_oecd_download.R
+I dati si riferiscono a Italia (ITA), Francia (FRA), Giappone (JPN), Germania (DEU), Gran Bretagna (GBR) e Stati Uniti.
+Il dato è annuale ed è stato elaborato per il periodo 1992-2017.
 }
 \keyword{datasets}
